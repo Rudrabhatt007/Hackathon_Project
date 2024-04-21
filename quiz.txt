@@ -1,0 +1,3 @@
+Question: What do I change when I change the stress of my voice going from one word to the other?
+Options: Phrases , Many Words , Actual Meaning , meanings
+Answer: meanings

@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<style>
+    p {
+        display: inline;
+        margin: 0;
+        padding: 0;
+    }
+
+    body {
+        font-family: sans-serif;
+        margin: 0;
+        padding: 20px;
+    }
+
+    .question {
+        font-size: 1.5em;
+        margin-bottom: 20px;
+    }
+
+    p {
+        display: inline-block;
+        margin: 0 10px 0 0;
+        padding: 5px 10px;
+        border: 1px solid #ddd;
+        cursor: pointer;
+    }
+
+    /* input[type="radio"] {
+        display: none;
+    } */
+
+    p:hover {
+        background-color: #eee;
+    }
+
+    p[id="opt1"]:checked+label,
+    p[id="opt2"]:checked+label,
+    p[id="opt3"]:checked+label,
+    p[id="opt4"]:checked+label {
+        background-color: #99CCFF;
+    }
+
+    button {
+        padding: 10px 20px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+    }
+
+    button:hover {
+        background-color: #3e8e41;
+    }
+</style>
+
+<body>
+    <div class="question">
+    </div>
+    <input type="radio" name="opt" id="op1">
+    <p id="opt1"></p>
+    <input type="radio" name="opt" id="op2">
+    <p id="opt2"></p>
+    <input type="radio" name="opt" id="op3">
+    <p id="opt3"></p>
+    <input type="radio" name="opt" id="op4">
+    <p id="opt4"></p>
+    <button onclick="check()">Submit</button>
+</body>
+<script>
+    let question = document.querySelector('.question');
+    let opt1 = document.querySelector("#opt1");
+    let opt2 = document.querySelector("#opt2");
+    let opt3 = document.querySelector("#opt3");
+    let opt4 = document.querySelector("#opt4");
+    let json;
+    fetch('http://localhost:5500/quiz') // Replace with your server URL and route
+        .then(response => response.json()) // Parse the JSON response
+        .then(data => {
+            // Access the data from your JSON object (e.g., data.name, data.age)
+            json = data;
+            console.log(data); // Log the data to the console for verification
+            // You can further manipulate or display the data here
+            question.innerHTML = data.Question;
+            let random = Math.floor(Math.random() * 4);
+            opt1.innerHTML = data.Options[random];
+            opt2.innerHTML = data.Options[(random + 1) % 4];
+            opt3.innerHTML = data.Options[(random + 2) % 4];
+            opt4.innerHTML = data.Options[(random + 3) % 4];
+            op1.value = data.Options[random];
+            op2.value = data.Options[(random + 1) % 4];
+            op3.value = data.Options[(random + 2) % 4];
+            op4.value = data.Options[(random + 3) % 4];
+        })
+        .catch(error => {
+            console.error('Error fetching data:', error);
+        });
+
+    function check() {
+        let radioButtons = document.getElementsByName('opt');
+        let selectedRadio;
+        for (const radio of radioButtons) {
+            if (radio.checked) {
+                selectedRadio = radio;
+                break; // Exit the loop once a checked button is found
+            }
+        }
+        if (selectedRadio.value == json.Answer) {
+            alert("Correct");
+        }
+        else {
+            alert("Wrong");
+        }
+    }
+
+</script>
+
+</html>
